@@ -1,0 +1,20 @@
+# Virtual Environments
+.venv/
+venv/
+
+# GIT
+.git
+.gitignore
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Docker
+Dockerfile
+docker-compose*.yaml
+
+# Local files
+local/
+.vscode/
+logs/*
