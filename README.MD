@@ -1,15 +1,27 @@
+# Zontahnos
+
+This is a framework aimed at monitoring network endpoints. It will turn up an API (FastAPI), TSDB (InfluxDB), and Grafana. With this, you can use zontahnos-agent (https://github.com/sjjensen2004/zontahnos-agent) which is an agent deployed on remote hosts that will monitor network endpoints. For example, if you have a critical applicaiton you will be able to monitor its network performance and avaialblity from multiple vantage points (i.e., DC, HQ, Branch offices) and discover/correct issues as they arise.
+
+**_NOTE_** This is currently a solo project in beta. It has not been security hardened so use at your own risk.
+
 # Setup
-**_NOTE_** This is currently a solo project aimed at providing a user agents that can monitor network hosts. It's currently in beta and will be updated frequently. It has not been security hardened so use at your own risk. 
 
-## Create a .env folder in the root directory
-Inside of the .env folder, create three files:
--   influxdb2-admin-password
--   influxdb2-admin-token
--   influxdb2-admin-username
+## Create a .env file root directory
+**Note:** Use env_example and just rename it to .env
 
-In each file, update respectively. InfluxDB will use these files to create the initial admin user, password, and API token. 
+Inside of the .env file, create the following vars
+<pre>
+INFLUXDB_USERNAME=ADMIN_USERNAME
+INFLUXDB_PASSWORD=ADMIN_PASSWORD
+INFLUXDB_TOKEN=SOMESUPERSECRETADMINTOKEN==
+GF_SECURITY_ADMIN_USER=GRAFANAADMINUSER
+GF_SECURITY_ADMIN_PASSWORD=GRAFANAPASSWORD
+</pre>
+
 
 ## Create a .env file in the zontahnos/app/app directory
+Again, you can just rename the existing env_example to .env.
+
 Populate this file with the fillowing:
 
 <pre>
@@ -24,24 +36,21 @@ GRAFANA_TOKEN="placeholder for later use"
 docker compose up --build
 
 ## InfluxDB login
-You log in using the username and passwords created in the respective files above. 
+You log in using the username and passwords created in the root .env file referenced above.  
 
-URL: http://127.0.0.1:8083
+URL: http://127.0.0.1:8086
 
 ## Grafana login
 By default, it pulls the user/pass from the docker compose file. 
 
-URL: http://127.0.0.1:8086
-User: admin
-pass: adminadmin
+URL: http://127.0.0.1:3000
 
 ## API Docs
 The API docs are located at:
 
-URL: http://127.0.0.1:3000/docs
+URL: http://127.0.0.1:8080/docs
 
 ## Basic workflow
-Create a new icmp monitoring DB entry using the http://127.0.0.1:8000/api/v1/icmp/create endpoint. This will return a secret which you should copy for use with the zontahnos agent located <placeholder>.
+Create a new icmp monitoring DB entry using the http://<api>:8080/api/v1/icmp/create endpoint. This will generate and return a secret which you should copy for use when activating zonthanos-agent(s).
 
-## I did notify that this is beta, right? 
-Currently you will have to build out your own grafana dashboards but I will be providing some automation wrappers to do the heavy lifting shortly. 
+## This is beta.
