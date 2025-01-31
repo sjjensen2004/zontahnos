@@ -41,7 +41,7 @@ The API docs are located at:
 URL: http://127.0.0.1:3000/docs
 
 ## Basic workflow
-Create a new icmp monitoring DB entry using the http://127.0.0.1:8000/api/v1/icmp/create endpoint. This will return a secret whichh you should copy for use with the zontahnos agent located <placeholder>.
+Create a new icmp monitoring DB entry using the http://127.0.0.1:8000/api/v1/icmp/create endpoint. This will return a secret which you should copy for use with the zontahnos agent located <placeholder>.
 
-## I did say this is beta, right? 
+## I did notify that this is beta, right? 
 Currently you will have to build out your own grafana dashboards but I will be providing some automation wrappers to do the heavy lifting shortly. 
