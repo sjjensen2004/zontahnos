@@ -4,6 +4,10 @@ This is a framework aimed at monitoring network endpoints. It will turn up an AP
 
 **_NOTE_** This is currently a solo project in beta. It has not been security hardened so use at your own risk.
 
+Example visualization representing a zontahnos agent running locally proving 1.1.1.1, 8.8.8.8, and 8.8.4.4:
+
+![Grafana Network Graph](images/grafana.png)
+
 # Setup
 
 ## Create a .env file root directory
