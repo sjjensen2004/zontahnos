@@ -1,6 +1,6 @@
 # Zontahnos
 
-This is a framework aimed at monitoring network endpoints. It will turn up an API (FastAPI), TSDB (InfluxDB), and Grafana. With this, you can use zontahnos-agent (https://github.com/sjjensen2004/zontahnos-agent) which is an agent deployed on remote hosts that will monitor network endpoints. For example, if you have a critical applicaiton you will be able to monitor its network performance and avaialblity from multiple vantage points (i.e., DC, HQ, Branch offices) and discover/correct issues as they arise.
+This is a framework aimed at monitoring network endpoints. It will turn up an API (FastAPI), TSDB (InfluxDB), and Grafana. With this, you can use zontahnos-agent (https://github.com/sjjensen2004/zontahnos-agent) which is an agent deployed on remote hosts that will monitor network endpoints. For example, if you have a critical application you will be able to monitor its network performance and avaialblity from multiple vantage points (i.e., DC, HQ, Branch offices) and discover/correct issues as they arise.
 
 **_NOTE_** This is currently a solo project in beta. It has not been security hardened so use at your own risk.
 
