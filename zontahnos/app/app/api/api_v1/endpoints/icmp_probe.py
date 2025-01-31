@@ -3,12 +3,13 @@ from fastapi import APIRouter, HTTPException
 from app.pydantic_models import icmp_probe
 from app.utils.db_manager import InfluxDBManager
 from app.core.config import settings
-import logging 
+import logging
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
 db_manager = InfluxDBManager()
+
 
 @router.post("/create", summary="Create an ICMP probe")
 def create_icmp_probe(body: icmp_probe.Create):
@@ -26,6 +27,7 @@ def create_icmp_probe(body: icmp_probe.Create):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to create probe: {str(e)}")
 
+
 @router.post("/delete", summary="Delete an ICMP probe")
 def delete_icmp_probe(body: icmp_probe.Delete):
     """
@@ -41,6 +43,7 @@ def delete_icmp_probe(body: icmp_probe.Delete):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to delete probe: {str(e)}")
 
+
 @router.post("/update", summary="Update probe metrics")
 def update_icmp_record(body: icmp_probe.Update):
     """
@@ -48,23 +51,22 @@ def update_icmp_record(body: icmp_probe.Update):
     """
     try:
         if not db_manager.validate_probe_key(body.probe_name, body.key):
-            raise HTTPException(status_code=403, detail="Invalid secret key and/or probe name.")
-        
+            raise HTTPException(
+                status_code=403, detail="Invalid secret key and/or probe name."
+            )
+
         db_manager.write_icmp_probe(
-            body.location,
-            body.probe_name,
-            body.target_host,
-            body.latency,
-            body.status
+            body.location, body.probe_name, body.target_host, body.latency, body.status
         )
         return {"message": "ICMP probe stored successfully"}
-    
+
     except HTTPException as http_exc:  # Allow FastAPI to handle known errors
-        raise http_exc  
-    
+        raise http_exc
+
     except Exception as e:  # Catch unexpected errors and return a 500
         raise HTTPException(status_code=500, detail=f"Failed to store probe: {str(e)}")
-    
+
+
 @router.get("/list", summary="List all ICMP probes")
 def list_icmp_probes():
     """
@@ -75,4 +77,3 @@ def list_icmp_probes():
         return {"probes": probes}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to list probes: {str(e)}")
-    

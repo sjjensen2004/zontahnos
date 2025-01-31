@@ -8,14 +8,13 @@ logger = logging.getLogger(__name__)
 INFLUXDB_TOKEN = settings.INFLUXDB_TOKEN
 INFLUXDB_URL = settings.INFLUXDB_URL
 ORG = settings.ORG
-BUCKET = settings.BUCKET   
+BUCKET = settings.BUCKET
+
 
 class InfluxDBManager:
     def __init__(self):
         """Initialize InfluxDB client and APIs."""
-        self.client = InfluxDBClient(
-            url=INFLUXDB_URL, token=INFLUXDB_TOKEN, org=ORG
-        )
+        self.client = InfluxDBClient(url=INFLUXDB_URL, token=INFLUXDB_TOKEN, org=ORG)
         self.write_api = self.client.write_api()
         self.query_api = self.client.query_api()
 
@@ -65,7 +64,7 @@ class InfluxDBManager:
         query = f'from(bucket: "{BUCKET}") |> range(start: -1d) |> filter(fn: (r) => r._measurement == "icmp_probes" and r.name == "{probe_name}")'
         result = self.query_api.query(org=ORG, query=query)
         return len(result) > 0
-    
+
     def list_icmp_probes(self):
         """List all ICMP probes with their name and location."""
         query = f'from(bucket: "{BUCKET}") |> range(start: -1d) |> filter(fn: (r) => r._measurement == "icmp_probes") |> keep(columns: ["name", "location"])'
