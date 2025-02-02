@@ -13,7 +13,7 @@ load_dotenv()
 GRAFANA_URL = "http://127.0.0.1:3000"
 GRAFANA_SERVICE_ACCOUNT = "zontahnos"
 GRAFANA_API_TOKEN_NAME = "zontahnos"
-INFLUX_URL = "http://127.0.0.1:8086"
+INFLUX_URL = "http://influxdb2:8086"
 INFLUX_USERNAME = os.getenv("INFLUXDB_USERNAME")
 INFLUXDB_PASSWORD = os.getenv("INFLUXDB_PASSWORD")
 INFLUXDB_TOKEN = os.getenv("INFLUXDB_TOKEN")
@@ -21,12 +21,13 @@ INFLUXDB_INIT_ORG = os.getenv("INFLUXDB_INIT_ORG")
 INFLUXDB_INIT_BUCKET = os.getenv("INFLUXDB_INIT_BUCKET")
 GF_SECURITY_ADMIN_USER = os.getenv("GF_SECURITY_ADMIN_USER")
 GF_SECURITY_ADMIN_PASSWORD = os.getenv("GF_SECURITY_ADMIN_PASSWORD")
+ENV = "dev"
 
 
 if __name__ == "__main__":
     # Seed Vault Schema for dev and prod envs
-    influxpath = "dev/zontahnos/influxdb"
-    grafanapath = "dev/zontahnos/grafana"
+    influxpath = f"{ENV}/zontahnos/influxdb"
+    grafanapath = f"{ENV}/zontahnos/grafana"
 
     # Create Vault Tools object
     vt = VaultTool(
@@ -37,13 +38,13 @@ if __name__ == "__main__":
     vt.mount_custom_engine("prod")
 
     # Store env KV in Vault
-    vt.store_kv(influxpath, {"username": INFLUX_USERNAME})
-    vt.store_kv(influxpath, {"password": INFLUXDB_PASSWORD})
-    vt.store_kv(influxpath, {"api_token": INFLUXDB_TOKEN})
-    vt.store_kv(influxpath, {"init_org": INFLUXDB_INIT_ORG})
-    vt.store_kv(influxpath, {"init_bucket": INFLUXDB_INIT_BUCKET})
-    vt.store_kv(grafanapath, {"username": GF_SECURITY_ADMIN_USER})
-    vt.store_kv(grafanapath, {"password": GF_SECURITY_ADMIN_PASSWORD})
+    vt.store_kv(ENV, influxpath, {"username": INFLUX_USERNAME})
+    vt.store_kv(ENV, influxpath, {"password": INFLUXDB_PASSWORD})
+    vt.store_kv(ENV, influxpath, {"api_token": INFLUXDB_TOKEN})
+    vt.store_kv(ENV, influxpath, {"init_org": INFLUXDB_INIT_ORG})
+    vt.store_kv(ENV, influxpath, {"init_bucket": INFLUXDB_INIT_BUCKET})
+    vt.store_kv(ENV, grafanapath, {"username": GF_SECURITY_ADMIN_USER})
+    vt.store_kv(ENV, grafanapath, {"password": GF_SECURITY_ADMIN_PASSWORD})
 
     # Create Grafana Tools object
     gt = GrafanaTools(
@@ -61,7 +62,7 @@ if __name__ == "__main__":
     )
 
     # Store the Grafana API token in Vault
-    vt.store_kv(grafanapath, {"api_key": gat})
+    vt.store_kv(ENV, grafanapath, {"api_key": gat})
 
     # Attach InfluxDB to Grafana
     attach_grafana_influx(

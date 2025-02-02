@@ -1,5 +1,3 @@
-version: "3.7"
-
 services:
   vault:
     image: hashicorp/vault:latest
@@ -14,9 +12,10 @@ services:
       - VAULT_ADDR=${VAULT_ADDR}
       - VAULT_API_ADDR=${VAULT_API_ADDR}
       - VAULT_LOG_LEVEL=${VAULT_LOG_LEVEL}
-    entrypoint: vault server -dev -dev-root-token-id=${VAULT_DEV_ROOT_TOKEN_ID}
+      - VAULT_UI=${VAULT_UI}
+    entrypoint: vault server -dev -dev-root-token-id=${VAULT_DEV_ROOT_TOKEN_ID} -dev-listen-address=0.0.0.0:8200
     volumes:
-      - vault-data:/vault/data
+      - dev-vault-data:/vault/data
 
   api:
     build: zontahnos
@@ -41,8 +40,8 @@ services:
       DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB_USERNAME}
       DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB_PASSWORD}
       DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUXDB_TOKEN}
-      DOCKER_INFLUXDB_INIT_ORG: netsmart
-      DOCKER_INFLUXDB_INIT_BUCKET: network_monitoring
+      DOCKER_INFLUXDB_INIT_ORG: ${INFLUXDB_INIT_ORG}
+      DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUXDB_INIT_BUCKET}
     volumes:
       - dev-influxdb2-data:/var/lib/influxdb2
       - dev-influxdb2-config:/etc/influxdb2
@@ -63,10 +62,10 @@ services:
       - influxdb2
       - vault
     restart: unless-stopped
-    # entrypoint: ["/bin/bash", "/scripts/grafana-init.sh"]
+
 
 volumes:
   dev-influxdb2-data:
   dev-influxdb2-config:
   dev-grafana-data:
-  vault-data:
+  dev-vault-data:

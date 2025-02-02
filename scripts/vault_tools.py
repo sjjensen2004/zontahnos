@@ -33,10 +33,11 @@ class VaultTool:
         except Exception as e:
             logger.error(f"Error mounting secret engine at path {name}: {e}")
 
-    def store_kv(self, path, data):
+    def store_kv(self, mount_point, path, data):
         self.client.secrets.kv.v2.create_or_update_secret(
-            path,
-            data
+            mount_point=mount_point,
+            path=path,
+            secret=data
         )
 
             

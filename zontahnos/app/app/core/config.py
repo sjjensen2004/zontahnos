@@ -1,5 +1,5 @@
 from pydantic import BaseSettings
-
+import hvac
 
 class Settings(BaseSettings):
     API_V1: str = "/api/v1"
@@ -7,10 +7,9 @@ class Settings(BaseSettings):
     INFLUXDB_TOKEN: str
     ORG: str
     BUCKET: str
-    GRAFANA_TOKEN: str
+    GRAFANA_TOKEN: str = None
 
     class Config:
         env_file = ".env"
-
 
 settings = Settings()
