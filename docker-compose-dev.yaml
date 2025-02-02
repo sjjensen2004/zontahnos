@@ -1,50 +1,72 @@
 version: "3.7"
 
 services:
-    api:
-        build: zontahnos
-        environment:
-          - PORT=8080
-        ports:
-          - 8080:8080
-        tty: true
-        stdin_open: true
-        # Overwrite Dockerfile CMD to reload on config change for dev
-        command: uvicorn main:app --reload --host 0.0.0.0 --port 8080
-        # Bind mount for development only
-        volumes:
-          - ./zontahnos/app/app:/app/app
+  vault:
+    image: hashicorp/vault:latest
+    container_name: vault
+    restart: unless-stopped
+    ports:
+      - "8200:8200"
+    cap_add:
+      - IPC_LOCK  # Required to enable in-memory encryption
+    environment:
+      - VAULT_DEV_ROOT_TOKEN_ID=${VAULT_DEV_ROOT_TOKEN_ID}
+      - VAULT_ADDR=${VAULT_ADDR}
+      - VAULT_API_ADDR=${VAULT_API_ADDR}
+      - VAULT_LOG_LEVEL=${VAULT_LOG_LEVEL}
+    entrypoint: vault server -dev -dev-root-token-id=${VAULT_DEV_ROOT_TOKEN_ID}
+    volumes:
+      - vault-data:/vault/data
 
-    influxdb2:
-      image: influxdb:2
-      ports:
-        - 8086:8086 # InfluxDB UI
-      environment:
-        DOCKER_INFLUXDB_INIT_MODE: setup
-        DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB_USERNAME}
-        DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB_PASSWORD}
-        DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUXDB_TOKEN}
-        DOCKER_INFLUXDB_INIT_ORG: netsmart
-        DOCKER_INFLUXDB_INIT_BUCKET: network_monitoring
-      volumes:
-          - dev-influxdb2-data:/var/lib/influxdb2
-          - dev-influxdb2-config:/etc/influxdb2
+  api:
+    build: zontahnos
+    environment:
+      - PORT=8080
+    ports:
+      - 8080:8080
+    tty: true
+    stdin_open: true
+    # Overwrite Dockerfile CMD to reload on config change for dev
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8080
+    # Bind mount for development only
+    volumes:
+      - ./zontahnos/app/app:/app/app
 
-    grafana:
-      image: grafana/grafana:latest
-      container_name: grafana
-      ports:
-        - "3000:3000"  # Grafana UI
-      environment:
-        - GF_SECURITY_ADMIN_USER=${GF_SECURITY_ADMIN_USER}
-        - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD}
-      volumes:
-        - dev-grafana_data:/var/lib/grafana
-      depends_on:
-        - influxdb2
-      restart: unless-stopped
+  influxdb2:
+    image: influxdb:2
+    ports:
+      - 8086:8086 # InfluxDB UI
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB_USERNAME}
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB_PASSWORD}
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUXDB_TOKEN}
+      DOCKER_INFLUXDB_INIT_ORG: netsmart
+      DOCKER_INFLUXDB_INIT_BUCKET: network_monitoring
+    volumes:
+      - dev-influxdb2-data:/var/lib/influxdb2
+      - dev-influxdb2-config:/etc/influxdb2
+    depends_on:
+      - vault
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"  # Grafana UI
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GF_SECURITY_ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD}
+    volumes:
+      - dev-grafana-data:/var/lib/grafana
+    depends_on:
+      - influxdb2
+      - vault
+    restart: unless-stopped
+    # entrypoint: ["/bin/bash", "/scripts/grafana-init.sh"]
 
 volumes:
   dev-influxdb2-data:
   dev-influxdb2-config:
-  dev-grafana_data:
+  dev-grafana-data:
+  vault-data:
