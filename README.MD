@@ -13,13 +13,25 @@ Example visualization representing a zontahnos agent running locally probing 1.1
 ## Create a .env file root directory
 **Note:** Use env_example and just rename it to .env
 
-Inside of the .env file, create the following vars
+The .env must contain the following vars:
 <pre>
-INFLUXDB_USERNAME=ADMIN_USERNAME
-INFLUXDB_PASSWORD=ADMIN_PASSWORD
-INFLUXDB_TOKEN=SOMESUPERSECRETADMINTOKEN==
-GF_SECURITY_ADMIN_USER=GRAFANAADMINUSER
-GF_SECURITY_ADMIN_PASSWORD=GRAFANAPASSWORD
+# INFLUX ENV_VARS
+INFLUXDB_USERNAME=
+INFLUXDB_PASSWORD=
+INFLUXDB_TOKEN=
+INFLUXDB_INIT_ORG=
+INFLUXDB_INIT_BUCKET=
+
+# GRAFANA ENV VARS
+GF_SECURITY_ADMIN_USER=
+GF_SECURITY_ADMIN_PASSWORD=
+
+# VAULT ENV VARS
+VAULT_DEV_ROOT_TOKEN_ID=
+VAULT_ADDR=http://0.0.0.0:8200
+VAULT_API_ADDR=http://0.0.0.0:8200
+VAULT_LOG_LEVEL=info
+VAULT_UI=true
 </pre>
 
 
@@ -38,6 +50,12 @@ GRAFANA_TOKEN="placeholder for later use"
 
 ## Build
 docker compose up --build
+
+## Structure and Seed Vault - Stitch influx to grafana
+Execute the script:
+`python scripts/seed_zontahnos.py`
+
+**Note** You may have to install zontahnos/app/requirements.txt if you are missing dependencies to run the script. 
 
 ## InfluxDB login
 You log in using the username and passwords created in the root .env file referenced above.  

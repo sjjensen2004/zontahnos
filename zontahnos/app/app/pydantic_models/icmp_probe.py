@@ -12,7 +12,7 @@ class Create(BaseModel):
 
 class Delete(BaseModel):
     name: str = Field(
-        ..., description="The referrence name for the probe. Must be unique."
+        ..., description="The referrence name for the probe."
     )
 
 
