@@ -1,5 +1,4 @@
 from pydantic import BaseSettings
-import hvac
 
 class Settings(BaseSettings):
     API_V1: str = "/api/v1"
@@ -8,6 +7,7 @@ class Settings(BaseSettings):
     ORG: str
     BUCKET: str
     GRAFANA_TOKEN: str = None
+    DATABASE_URL: str 
 
     class Config:
         env_file = ".env"
