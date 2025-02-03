@@ -27,7 +27,9 @@ services:
     stdin_open: true
     volumes:
       - prod-zontahnos:/app/app
-
+    depends_on:
+      postgres:
+        condition: service_healthy
   influxdb2:
     image: influxdb:2
     ports:
@@ -60,6 +62,22 @@ services:
       - vault
     restart: unless-stopped
 
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    volumes:
+      - prod-postgres-data:/var/lib/postgresql/data
+
 
 volumes:
   prod-influxdb2-data:
@@ -67,3 +85,4 @@ volumes:
   prod-grafana-data:
   prod-vault-data:
   prod-zontahnos:
+  prod-postgres-data:

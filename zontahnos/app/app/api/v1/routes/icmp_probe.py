@@ -27,9 +27,9 @@ def create_icmp_probe(body: icmp_probe.Create, db: Session = Depends(get_db)):
     secret_key = secrets.token_hex(16)  # Generate a 32-character hex key
     try:
         # Create the probe in PostgreSQL
-        probe_data = schema.ProbeCreate(name=body.name, location=body.location, secret_key=secret_key)
+        probe_data = schema.ProbeCreate(name=body.name, location=body.location, measurement=body.measurement, secret_key=secret_key)
         service_icmp_probe.create_probe(db=db, probe_data=probe_data)
-        return {"name": body.name, "location": body.location, "key": secret_key}
+        return {"name": body.name, "location": body.location, "measurement":body.measurement, "key": secret_key}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to create probe: {str(e)}")
 
@@ -83,7 +83,7 @@ def update_icmp_record(body: icmp_probe.Update, db: Session = Depends(get_db)):
 @router.get("/list", summary="List all ICMP probes")
 def list_icmp_probes(db: Session = Depends(get_db)):
     """
-    List all existing ICMP probes with their name and location.
+    List all existing ICMP probes with their name, location and measurement.
     """
     try:
         probes = service_icmp_probe.list_probes(db)

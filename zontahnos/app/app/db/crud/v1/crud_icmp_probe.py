@@ -4,7 +4,7 @@ from app.db import models
 from app.schemas.postgres.v1 import schema
 
 def create_probe(db: Session, probe: schema.ProbeCreate):
-    db_probe = models.IcmpProbe(name=probe.name, location=probe.location, secret_key=probe.secret_key)
+    db_probe = models.IcmpProbe(name=probe.name, location=probe.location, measurement=probe.measurement, secret_key=probe.secret_key)
     db.add(db_probe)
     db.commit()
     db.refresh(db_probe)

@@ -5,6 +5,7 @@ from typing import Optional
 class ProbeCreate(BaseModel):
     name: str = Field(..., description="The reference name for the probe. Must be unique.")
     location: str = Field(..., description="The location of the probe.")
+    measurement: str = Field(..., description="Influx Measurement Name")
     secret_key: str = Field(..., description="The secret key for the probe.")
 
 class Probe(BaseModel):

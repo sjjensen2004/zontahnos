@@ -8,4 +8,5 @@ class IcmpProbe(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
     location = Column(String)
+    measurement = Column(String)
     secret_key = Column(String)
