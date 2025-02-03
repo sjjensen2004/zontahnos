@@ -2,11 +2,10 @@
 import secrets
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
-from app.schemas.influx import icmp_probe
 from app.utils.influx_db_manager import InfluxDBManager
 from app.core.database import get_db
 from app.services.v1 import service_icmp_probe
-from app.schemas.postgres.v1 import schema
+from app.schemas.v1 import schema_icmp_probe as schema
 import logging
 
 logger = logging.getLogger(__name__)
@@ -16,7 +15,7 @@ db_manager = InfluxDBManager()
 
 
 @router.post("/create", summary="Create an ICMP probe")
-def create_icmp_probe(body: icmp_probe.Create, db: Session = Depends(get_db)):
+def create_icmp_probe(body: schema.Create, db: Session = Depends(get_db)):
     """
     Generate a key and database entry to collect ICMP probe metrics.
     """
@@ -29,13 +28,13 @@ def create_icmp_probe(body: icmp_probe.Create, db: Session = Depends(get_db)):
         # Create the probe in PostgreSQL
         probe_data = schema.ProbeCreate(name=body.name, location=body.location, measurement=body.measurement, secret_key=secret_key)
         service_icmp_probe.create_probe(db=db, probe_data=probe_data)
-        return {"name": body.name, "location": body.location, "measurement":body.measurement, "key": secret_key}
+        return {"name": body.name, "location": body.location, "measurement": body.measurement, "key": secret_key}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to create probe: {str(e)}")
 
 
 @router.post("/delete", summary="Delete an ICMP probe")
-def delete_icmp_probe(body: icmp_probe.Delete, db: Session = Depends(get_db)):
+def delete_icmp_probe(body: schema.Delete, db: Session = Depends(get_db)):
     """
     Delete an ICMP probe by name.
     """
@@ -45,8 +44,6 @@ def delete_icmp_probe(body: icmp_probe.Delete, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Probe not found")
 
     try:
-        # Delete the probe in InfluxDB
-        db_manager.delete_icmp_probe(body.name)
         # Delete the probe in PostgreSQL
         service_icmp_probe.delete_probe(db=db, probe_id=db_probe.id)
         return {"message": f"Probe {body.name} deleted successfully"}
@@ -55,7 +52,7 @@ def delete_icmp_probe(body: icmp_probe.Delete, db: Session = Depends(get_db)):
 
 
 @router.post("/update", summary="Update probe metrics")
-def update_icmp_record(body: icmp_probe.Update, db: Session = Depends(get_db)):
+def update_icmp_record(body: schema.Update, db: Session = Depends(get_db)):
     """
     Update an existing ICMP agent record.
     """
