@@ -1,7 +1,8 @@
 from fastapi import FastAPI
-from app.api.api_v1 import api_router
+from app.api.v1 import api_router
 from app.api.pages_router.route_home import home_router
 from app.core.config import settings
+from app.db.init_db import init_db
 import logging
 
 
@@ -32,6 +33,11 @@ def create_app() -> FastAPI:
     configure_logging()
     app = FastAPI(title="Zontahnos", openapi_url=f"/api/v1")
     include_routers(app)
+
+    @app.on_event("startup")
+    async def startup_event():
+        init_db()
+
     return app
 
 

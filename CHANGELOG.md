@@ -9,3 +9,8 @@
 - HashiCorp Vault to store KV secrets
 - Added scripts/seed_zontahnos.py to seed vault, grafana, and influx as well as attach inlfux to grafana
 - Automated the grafana API generation (Stored in vault)
+
+## [0.0.3] - 2025-02-03
+### Added
+- Postgres and migrated icmp probe creation to postgres (out of influx)
+- Introduced versioning to DB actions
