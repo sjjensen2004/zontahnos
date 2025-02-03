@@ -1,8 +1,8 @@
 from pydantic import BaseModel, Field
 from typing import Optional
-import logging
+from core.logger import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class Create(BaseModel):
     name: str = Field(..., description="The reference name for the probe. Must be unique.")

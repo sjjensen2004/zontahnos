@@ -3,9 +3,9 @@ from sqlalchemy.orm import Session
 import app.db.crud.v1.crud_icmp_probe as cp
 from app.db.models import IcmpProbe  
 from app.schemas.v1 import schema_icmp_probe as schema
-import logging
+from core.logger import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 def create_probe(db: Session, probe_data: schema.ProbeCreate):
     return cp.create_probe(db, probe_data)

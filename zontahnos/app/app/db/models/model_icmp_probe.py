@@ -1,9 +1,9 @@
 # app/db/models.py
 from sqlalchemy import Column, Integer, String
 from app.core.database import Base
-import logging
+from core.logger import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 class IcmpProbe(Base):
     __tablename__ = "probes"
