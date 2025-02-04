@@ -13,7 +13,7 @@ def include_routers(app: FastAPI):
 
 def create_app() -> FastAPI:
     """Create and configure the FastAPI application."""
-    app = FastAPI(title="Zontahnos", openapi_url=f"/api/v1")
+    app = FastAPI(title="Zontahnos", openapi_url=f"{settings.API_V1}")
     logger = get_logger(__name__) 
     include_routers(app)
 

@@ -14,3 +14,9 @@
 ### Added
 - Postgres and migrated icmp probe creation to postgres (out of influx)
 - Introduced versioning to DB actions
+
+## [0.0.4] - 2025-02-04
+### Added
+- Created prod, dev, and test environments 
+- Added automated test coverage via pytest 
+- Seeded test converage for icmp_probes

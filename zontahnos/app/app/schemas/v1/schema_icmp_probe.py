@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Optional
-from core.logger import get_logger
+from app.core.logger import get_logger
 
 logger = get_logger(__name__)
 

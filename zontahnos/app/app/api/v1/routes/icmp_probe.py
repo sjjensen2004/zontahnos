@@ -6,7 +6,7 @@ from app.utils.influx_db_manager import InfluxDBManager
 from app.core.database import get_db
 from app.services.v1 import service_icmp_probe as service
 from app.schemas.v1 import schema_icmp_probe as schema
-from core.logger import get_logger
+from app.core.logger import get_logger
 
 logger = get_logger(__name__)
 
