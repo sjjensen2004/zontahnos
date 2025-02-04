@@ -43,7 +43,7 @@ Populate this file with the fillowing:
 <pre>
 INFLUXDB_URL="http://influxdb2:8086"
 INFLUXDB_TOKEN="The token you populated in the influxdb2-admin-token file"
-ORG="netsmart"
+ORG="zontahnos"
 BUCKET="network_monitoring"
 GRAFANA_TOKEN="placeholder for later use"
 </pre>

@@ -15,5 +15,5 @@ logging.basicConfig(
 
 # Function to get logger for each module
 def get_logger(module_name: str):
-    logging.getLogger("Rx").setLevel(logging.WARNING)
+    # logging.getLogger("Rx").setLevel(logging.WARNING)
     return logging.getLogger(module_name)

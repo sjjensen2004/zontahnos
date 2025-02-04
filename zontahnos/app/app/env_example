@@ -3,6 +3,6 @@
 
 INFLUXDB_URL="http://influxdb2:8086"
 INFLUXDB_TOKEN="The token you provided in the root .env"
-ORG="netsmart"
+ORG="zontahnos"
 BUCKET="network_monitoring"
 GRAFANA_TOKEN="placeholder"
