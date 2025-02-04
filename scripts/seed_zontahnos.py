@@ -40,7 +40,7 @@ if __name__ == "__main__":
     # Store env KV in Vault
     vt.store_kv(ENV, influxpath + "/username", {"username": INFLUX_USERNAME})
     vt.store_kv(ENV, influxpath + "/password", {"password": INFLUXDB_PASSWORD})
-    vt.store_kv(ENV, influxpath + "api_token", {"api_token": INFLUXDB_TOKEN})
+    vt.store_kv(ENV, influxpath + "/api_token", {"api_token": INFLUXDB_TOKEN})
     vt.store_kv(ENV, influxpath + "/org", {"init_org": INFLUXDB_INIT_ORG})
     vt.store_kv(ENV, influxpath + "/bucket", {"init_bucket": INFLUXDB_INIT_BUCKET})
     vt.store_kv(ENV, grafanapath + "/username", {"username": GF_SECURITY_ADMIN_USER})
