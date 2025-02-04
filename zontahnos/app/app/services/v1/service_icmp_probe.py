@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 import app.db.crud.v1.crud_icmp_probe as cp
 from app.db.models import IcmpProbe  
 from app.schemas.v1 import schema_icmp_probe as schema
-from core.logger import get_logger
+from app.core.logger import get_logger
 
 logger = get_logger(__name__)
 

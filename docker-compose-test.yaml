@@ -69,9 +69,6 @@ services:
       dockerfile: Dockerfile.test
     environment:
       - PORT=8080
-    volumes:
-      - ./tests:/app/tests
-      - ./zontahnos/app/app:/app/app
     depends_on:
       postgres:
         condition: service_healthy

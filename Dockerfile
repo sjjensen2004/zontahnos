@@ -3,7 +3,7 @@ FROM python:3.10
 WORKDIR /app
 ARG REQUIREMENTS=requirements.txt
 
-COPY requirements requirements.txt
+COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
 COPY ./zontahnos/app/app ./app

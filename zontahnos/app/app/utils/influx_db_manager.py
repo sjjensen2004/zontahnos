@@ -1,7 +1,7 @@
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from datetime import datetime
 from app.core.config import settings
-from core.logger import get_logger
+from app.core.logger import get_logger
 
 logger = get_logger(__name__)
 
