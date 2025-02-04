@@ -26,8 +26,8 @@ ENV = "dev"
 
 if __name__ == "__main__":
     # Seed Vault Schema for dev and prod envs
-    influxpath = f"{ENV}/zontahnos/influxdb"
-    grafanapath = f"{ENV}/zontahnos/grafana"
+    influxpath = f"zontahnos/influxdb"
+    grafanapath = f"zontahnos/grafana"
 
     # Create Vault Tools object
     vt = VaultTool(
@@ -38,13 +38,13 @@ if __name__ == "__main__":
     vt.mount_custom_engine("prod")
 
     # Store env KV in Vault
-    vt.store_kv(ENV, influxpath, {"username": INFLUX_USERNAME})
-    vt.store_kv(ENV, influxpath, {"password": INFLUXDB_PASSWORD})
-    vt.store_kv(ENV, influxpath, {"api_token": INFLUXDB_TOKEN})
-    vt.store_kv(ENV, influxpath, {"init_org": INFLUXDB_INIT_ORG})
-    vt.store_kv(ENV, influxpath, {"init_bucket": INFLUXDB_INIT_BUCKET})
-    vt.store_kv(ENV, grafanapath, {"username": GF_SECURITY_ADMIN_USER})
-    vt.store_kv(ENV, grafanapath, {"password": GF_SECURITY_ADMIN_PASSWORD})
+    vt.store_kv(ENV, influxpath + "/username", {"username": INFLUX_USERNAME})
+    vt.store_kv(ENV, influxpath + "/password", {"password": INFLUXDB_PASSWORD})
+    vt.store_kv(ENV, influxpath + "api_token", {"api_token": INFLUXDB_TOKEN})
+    vt.store_kv(ENV, influxpath + "/org", {"init_org": INFLUXDB_INIT_ORG})
+    vt.store_kv(ENV, influxpath + "/bucket", {"init_bucket": INFLUXDB_INIT_BUCKET})
+    vt.store_kv(ENV, grafanapath + "/username", {"username": GF_SECURITY_ADMIN_USER})
+    vt.store_kv(ENV, grafanapath + "/password", {"password": GF_SECURITY_ADMIN_PASSWORD})
 
     # Create Grafana Tools object
     gt = GrafanaTools(
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     )
 
     # Store the Grafana API token in Vault
-    vt.store_kv(ENV, grafanapath, {"api_key": gat})
+    vt.store_kv(ENV, grafanapath + "/api_key", {"api_key": gat})
 
     # Attach InfluxDB to Grafana
     attach_grafana_influx(
