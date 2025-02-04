@@ -15,7 +15,6 @@ def create_app() -> FastAPI:
     """Create and configure the FastAPI application."""
     app = FastAPI(title="Zontahnos", openapi_url=f"/api/v1")
     logger = get_logger(__name__) 
-    logger.info("tes")
     include_routers(app)
 
     @app.on_event("startup")
