@@ -58,7 +58,7 @@ services:
     restart: unless-stopped
   api:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile.dev
     environment:
       - PORT=8080
@@ -68,7 +68,7 @@ services:
     stdin_open: true
     # command: uvicorn main:app --reload --host 0.0.0.0 --port 8080
     volumes:
-      - ./zontahnos/app/app:/app/app
+      - ./backend/app/app:/app/app
     depends_on:
       postgres:
         condition: service_healthy
@@ -86,6 +86,19 @@ services:
     volumes:
       - dev-influxdb2-data:/var/lib/influxdb2
       - dev-influxdb2-config:/etc/influxdb2
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    environment:
+      - NEXT_PUBLIC_API_URL=http://api:8080
+    ports:
+      - 3001:3000
+    volumes:
+      - ./frontend/app:/app
+    command: sh -c "npm install && npm run dev"
+    depends_on:
+      - api
 
 volumes:
   dev-influxdb2-data:
